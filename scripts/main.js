@@ -19,6 +19,7 @@ let currentTrackIndex = 0;
 let isPlaying = false;
 let hasInteracted = false;
 let volumeFadeInterval = null;
+let playedTracks = new Set(); // Track which songs have been played
 
 const backgroundMusic = document.getElementById('backgroundMusic');
 const musicToggle = document.getElementById('musicToggle');
@@ -32,6 +33,12 @@ function loadTrack(index) {
     backgroundMusic.src = `assets/audio/${playlist[index].file}`;
     backgroundMusic.load(); // Ensure the track is loaded
     updatePlaylistUI();
+    
+    // Reset progress border when loading new track
+    const activeItem = document.querySelector('.playlist-item.active');
+    if (activeItem) {
+        activeItem.style.setProperty('--progress-degrees', '0');
+    }
 }
 
 function updatePlaylistUI() {
@@ -87,6 +94,13 @@ function updateMusicProgress() {
     if (backgroundMusic.duration) {
         const percent = (backgroundMusic.currentTime / backgroundMusic.duration) * 100;
         progressFill.style.width = percent + '%';
+        
+        // Update progress border on active playlist item (convert percent to degrees)
+        const activeItem = document.querySelector('.playlist-item.active');
+        if (activeItem) {
+            const degrees = (percent / 100) * 360;
+            activeItem.style.setProperty('--progress-degrees', degrees);
+        }
     }
 }
 
@@ -167,16 +181,124 @@ function setupMusicControls() {
         });
     }
 
+    let isHandlingEnded = false; // Prevent multiple ended events from firing
+    
     backgroundMusic.addEventListener('ended', function() {
-        // Move to next track (will loop back to 0 if at end)
-        const nextIndex = (currentTrackIndex + 1) % playlist.length;
-        loadTrack(nextIndex);
-        if (isPlaying) {
-            // Wait for track to load, then play
-            backgroundMusic.addEventListener('canplay', function playNext() {
-                backgroundMusic.removeEventListener('canplay', playNext);
-                playMusic();
-            }, { once: true });
+        // Prevent multiple ended events from being processed
+        if (isHandlingEnded) {
+            console.log('Already handling ended event, skipping');
+            return;
+        }
+        
+        isHandlingEnded = true;
+        
+        // Mark current track as played BEFORE calculating next
+        const justPlayedIndex = currentTrackIndex;
+        playedTracks.add(justPlayedIndex);
+        
+        console.log('Track ended:', justPlayedIndex, 'Played tracks:', Array.from(playedTracks));
+        
+        // If all tracks have been played, reset the set BUT exclude the current one
+        if (playedTracks.size >= playlist.length) {
+            console.log('All tracks played, resetting set (excluding current)');
+            playedTracks.clear();
+            // Don't add current back - we want to skip it
+        }
+        
+        // Find next unplayed track - start from next index
+        let nextIndex = (justPlayedIndex + 1) % playlist.length;
+        let attempts = 0;
+        const maxAttempts = playlist.length * 2; // More attempts to be safe
+        
+        // Skip tracks that have already been played AND ensure it's not the same track
+        while ((playedTracks.has(nextIndex) || nextIndex === justPlayedIndex) && attempts < maxAttempts) {
+            nextIndex = (nextIndex + 1) % playlist.length;
+            attempts++;
+            console.log('Skipping track', nextIndex, 'attempt', attempts);
+        }
+        
+        // CRITICAL: Final safety check - if we somehow ended up with the same track, force move
+        if (nextIndex === justPlayedIndex) {
+            console.warn('Same track detected, forcing next');
+            nextIndex = (nextIndex + 1) % playlist.length;
+            // Also mark it so we don't get stuck
+            if (nextIndex === justPlayedIndex) {
+                // If we only have 1 song (shouldn't happen), just skip it
+                nextIndex = (nextIndex + 1) % playlist.length;
+            }
+        }
+        
+        console.log('Loading next track:', nextIndex, '(was:', justPlayedIndex, ')');
+        
+        // CRITICAL: Update currentTrackIndex BEFORE loading to prevent race conditions
+        currentTrackIndex = nextIndex;
+        
+        // Load the next track directly (don't use loadTrack to avoid state conflicts)
+        const wasPlaying = isPlaying; // Remember if we were playing
+        backgroundMusic.src = `assets/audio/${playlist[nextIndex].file}`;
+        backgroundMusic.load(); // Ensure the track is loaded
+        updatePlaylistUI();
+        
+        // Reset progress border
+        const activeItem = document.querySelector('.playlist-item.active');
+        if (activeItem) {
+            activeItem.style.setProperty('--progress-degrees', '0');
+        }
+        
+        // Wait for track to load, then play if we were playing
+        const playNextTrack = function() {
+            // Remove listeners to prevent multiple calls
+            backgroundMusic.removeEventListener('canplay', playNextTrack);
+            backgroundMusic.removeEventListener('loadeddata', playNextTrack);
+            
+            isHandlingEnded = false; // Reset flag
+            
+            if (wasPlaying) {
+                // Verify we're loading the right track
+                const expectedSrc = `assets/audio/${playlist[nextIndex].file}`;
+                if (backgroundMusic.src.includes(playlist[nextIndex].file)) {
+                    // Small delay to ensure audio is fully ready
+                    setTimeout(() => {
+                        backgroundMusic.play()
+                            .then(() => {
+                                isPlaying = true;
+                                updateMusicControls();
+                                console.log('Next track playing:', nextIndex, playlist[nextIndex].title);
+                            })
+                            .catch(error => {
+                                console.error('Error playing next track:', error);
+                                isPlaying = false;
+                                updateMusicControls();
+                                isHandlingEnded = false;
+                            });
+                    }, 150);
+                } else {
+                    console.error('Track mismatch! Expected:', expectedSrc, 'Got:', backgroundMusic.src);
+                    isHandlingEnded = false;
+                }
+            } else {
+                isHandlingEnded = false;
+            }
+        };
+        
+        // Listen for when track is ready
+        if (backgroundMusic.readyState >= 2) {
+            // Already loaded, play immediately
+            setTimeout(() => {
+                playNextTrack();
+            }, 50);
+        } else {
+            // Wait for load
+            backgroundMusic.addEventListener('canplay', playNextTrack, { once: true });
+            backgroundMusic.addEventListener('loadeddata', playNextTrack, { once: true });
+            
+            // Timeout fallback
+            setTimeout(() => {
+                if (isHandlingEnded) {
+                    console.log('Timeout waiting for track to load, playing anyway');
+                    playNextTrack();
+                }
+            }, 2000);
         }
     });
 
@@ -205,60 +327,82 @@ function setupMusicControls() {
     function startMusicWithFade() {
         if (isPlaying) return; // Already playing
         
-        backgroundMusic.volume = 0.1;
-        const playPromise = backgroundMusic.play();
+        // Ensure audio is loaded first
+        if (backgroundMusic.readyState === 0) {
+            backgroundMusic.load();
+        }
         
-        if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    isPlaying = true;
-                    updateMusicControls();
-                    // Then fade in volume over 6 seconds
-                    let volume = 0.1;
-                    const targetVolume = 0.3;
-                    const fadeDuration = 6000;
-                    const steps = 100;
-                    const volumeStep = (targetVolume - 0.1) / steps;
-                    const timeStep = fadeDuration / steps;
-                    
-                    volumeFadeInterval = setInterval(() => {
-                        volume += volumeStep;
-                        if (volume >= targetVolume) {
-                            volume = targetVolume;
-                            clearInterval(volumeFadeInterval);
+        backgroundMusic.volume = 0.1;
+        
+        // Try to play
+        const tryPlay = () => {
+            const playPromise = backgroundMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        isPlaying = true;
+                        updateMusicControls();
+                        console.log('Music autoplay started successfully');
+                        
+                        // Then fade in volume over 6 seconds
+                        let volume = 0.1;
+                        const targetVolume = 0.3;
+                        const fadeDuration = 6000;
+                        const steps = 100;
+                        const volumeStep = (targetVolume - 0.1) / steps;
+                        const timeStep = fadeDuration / steps;
+                        
+                        volumeFadeInterval = setInterval(() => {
+                            volume += volumeStep;
+                            if (volume >= targetVolume) {
+                                volume = targetVolume;
+                                clearInterval(volumeFadeInterval);
+                            }
+                            backgroundMusic.volume = volume;
+                        }, timeStep);
+                    })
+                    .catch(error => {
+                        console.log('Auto-play prevented:', error);
+                        // Try again when audio is ready
+                        if (backgroundMusic.readyState < 2) {
+                            backgroundMusic.addEventListener('canplay', () => {
+                                if (!isPlaying) {
+                                    tryPlay();
+                                }
+                            }, { once: true });
+                        } else {
+                            // Audio is ready but play was blocked - try on interaction
+                            const tryPlayOnInteraction = () => {
+                                if (!isPlaying) {
+                                    tryPlay();
+                                }
+                            };
+                            document.addEventListener('click', tryPlayOnInteraction, { once: true });
+                            document.addEventListener('touchstart', tryPlayOnInteraction, { once: true });
+                            document.addEventListener('keydown', tryPlayOnInteraction, { once: true });
+                            document.addEventListener('mousemove', tryPlayOnInteraction, { once: true });
                         }
-                        backgroundMusic.volume = volume;
-                    }, timeStep);
-                })
-                .catch(error => {
-                    console.log('Auto-play prevented:', error);
-                    // Try multiple strategies to start playback
-                    // Strategy 1: Try again after a short delay
-                    setTimeout(() => {
-                        if (!isPlaying) {
-                            startMusicWithFade();
-                        }
-                    }, 500);
-                    
-                    // Strategy 2: Try on any user interaction
-                    const tryPlayOnInteraction = () => {
-                        if (!isPlaying) {
-                            startMusicWithFade();
-                        }
-                    };
-                    document.addEventListener('click', tryPlayOnInteraction, { once: true });
-                    document.addEventListener('touchstart', tryPlayOnInteraction, { once: true });
-                    document.addEventListener('keydown', tryPlayOnInteraction, { once: true });
-                    document.addEventListener('mousemove', tryPlayOnInteraction, { once: true });
-                });
+                    });
+            }
+        };
+        
+        // Wait for audio to be ready if needed
+        if (backgroundMusic.readyState >= 2) {
+            tryPlay();
+        } else {
+            backgroundMusic.addEventListener('canplay', tryPlay, { once: true });
+            backgroundMusic.addEventListener('loadeddata', tryPlay, { once: true });
         }
     }
     
     // Try to start immediately - multiple attempts
-    // First attempt: immediate
+    // First attempt: immediate (after a small delay to ensure audio element is ready)
     setTimeout(() => {
-        startMusicWithFade();
-    }, 100);
+        if (!isPlaying) {
+            startMusicWithFade();
+        }
+    }, 200);
     
     // Second attempt: after DOM is fully loaded
     if (document.readyState === 'loading') {
@@ -267,14 +411,14 @@ function setupMusicControls() {
                 if (!isPlaying) {
                     startMusicWithFade();
                 }
-            }, 200);
+            }, 300);
         });
     } else {
         setTimeout(() => {
             if (!isPlaying) {
                 startMusicWithFade();
             }
-        }, 200);
+        }, 300);
     }
     
     // Third attempt: after window load
@@ -283,8 +427,17 @@ function setupMusicControls() {
             if (!isPlaying) {
                 startMusicWithFade();
             }
-        }, 300);
+        }, 500);
     });
+    
+    // Fourth attempt: when audio metadata is loaded
+    backgroundMusic.addEventListener('loadedmetadata', () => {
+        setTimeout(() => {
+            if (!isPlaying) {
+                startMusicWithFade();
+            }
+        }, 100);
+    }, { once: true });
 }
 
 // Hero Photo Collage with Flipping Cards
@@ -292,24 +445,28 @@ function loadHeroCollage() {
     const collage = document.getElementById('heroCollage');
     if (!collage) return;
     
+    // All photos except "Garrett Hoi An Vietnam.JPG" for hero collage
     const photos = [
-        '3755AA037.jpg',
-        'DA140549-EB57-4BAD-9DF1-3BF71A8451BA.JPG',
-        'IMG_0096.JPG',
-        'IMG_0097.JPG',
-        'IMG_0140.jpeg',
-        'IMG_0639.JPG',
-        'IMG_0671.JPG',
-        'IMG_1175.jpeg',
-        'IMG_1213.JPG',
-        'IMG_1542.JPG',
-        'IMG_1958.JPG',
-        'IMG_2864.JPG',
-        'IMG_3212.JPG',
-        'IMG_4755.JPG',
-        'IMG_7689.JPG',
-        'IMG_7915.JPG',
-        'IMG_8530.jpeg'
+        'Ajax.jpeg',
+        'Ediths Garrett.JPG',
+        'Fam in Hamptons.jpeg',
+        'Garrett Aix en Provence.JPG',
+        'Garrett and Brendan Lobster Pasta.JPG',
+        'Garrett and Devon Skiing.jpg',
+        'Garrett and Tri in Copenhagen.JPG',
+        'Garrett at Guerite.JPG',
+        // 'Garrett Hoi An Vietnam.JPG', // Excluded from hero collage
+        'Garrett Ibiza.jpeg',
+        'Garrett in Cope.JPG',
+        'Garrett in Marseille.JPG',
+        'Garrett in Tokyo.JPG',
+        'Garrett Marathon 2022.JPG',
+        'Guerite Lunch.JPG',
+        'Lads at Liam VDHs Wedding.JPG',
+        'Shortys.JPG',
+        'Squad at Guerite.JPG',
+        'Squad Cloud9.jpeg',
+        'Takalads.jpeg'
     ];
     
     // Shuffle and take 12 photos for the grid
@@ -317,13 +474,15 @@ function loadHeroCollage() {
     
     collage.innerHTML = shuffled.map((photo, index) => {
         const backPhoto = shuffled[(index + 6) % shuffled.length];
+        const photoName = photo.replace(/\.(jpg|jpeg|JPG|JPEG)$/i, '').replace(/\s+/g, ' ');
+        const backPhotoName = backPhoto.replace(/\.(jpg|jpeg|JPG|JPEG)$/i, '').replace(/\s+/g, ' ');
         return `
         <div class="hero-photo-card" style="animation-delay: ${index * 0.1}s">
             <div class="hero-photo-card-front">
-                <img src="assets/images/photos/${photo}" alt="Photo ${index + 1}" loading="eager" onerror="console.error('Failed to load:', 'assets/images/photos/${photo}'); this.parentElement.parentElement.style.display='none';">
+                <img src="assets/images/photos/${photo}" alt="${photoName} - Garrett Wolfe" loading="eager" onerror="console.error('Failed to load:', 'assets/images/photos/${photo}'); this.parentElement.parentElement.style.display='none';">
             </div>
             <div class="hero-photo-card-back">
-                <img src="assets/images/photos/${backPhoto}" alt="Photo ${index + 1}" loading="eager" onerror="console.error('Failed to load:', 'assets/images/photos/${backPhoto}'); this.parentElement.parentElement.style.display='none';">
+                <img src="assets/images/photos/${backPhoto}" alt="${backPhotoName} - Garrett Wolfe" loading="eager" onerror="console.error('Failed to load:', 'assets/images/photos/${backPhoto}'); this.parentElement.parentElement.style.display='none';">
             </div>
         </div>
     `;
@@ -385,7 +544,7 @@ function setupPhotoModal() {
 
 // Dynamic Hover Effects Based on Mouse Position
 function setupDynamicHover() {
-    const elements = document.querySelectorAll('.favorite-category, .toolbar-link, .playlist-item, .experience-card, .gallery-item, .network-link');
+    const elements = document.querySelectorAll('.favorite-category, .toolbar-link, .playlist-item, .experience-card, .gallery-item, .network-link, .hero-cta');
     
     elements.forEach(element => {
         element.addEventListener('mousemove', function(e) {
@@ -537,30 +696,36 @@ function loadPhotoGallery() {
     if (!gallery) return;
 
     const photos = [
-        '3755AA037.jpg',
-        'DA140549-EB57-4BAD-9DF1-3BF71A8451BA.JPG',
-        'IMG_0096.JPG',
-        'IMG_0097.JPG',
-        'IMG_0140.jpeg',
-        'IMG_0639.JPG',
-        'IMG_0671.JPG',
-        'IMG_1175.jpeg',
-        'IMG_1213.JPG',
-        'IMG_1542.JPG',
-        'IMG_1958.JPG',
-        'IMG_2864.JPG',
-        'IMG_3212.JPG',
-        'IMG_4755.JPG',
-        'IMG_7689.JPG',
-        'IMG_7915.JPG',
-        'IMG_8530.jpeg'
+        'Ajax.jpeg',
+        'Ediths Garrett.JPG',
+        'Fam in Hamptons.jpeg',
+        'Garrett Aix en Provence.JPG',
+        'Garrett and Brendan Lobster Pasta.JPG',
+        'Garrett and Devon Skiing.jpg',
+        'Garrett and Tri in Copenhagen.JPG',
+        'Garrett at Guerite.JPG',
+        'Garrett Hoi An Vietnam.JPG',
+        'Garrett Ibiza.jpeg',
+        'Garrett in Cope.JPG',
+        'Garrett in Marseille.JPG',
+        'Garrett in Tokyo.JPG',
+        'Garrett Marathon 2022.JPG',
+        'Guerite Lunch.JPG',
+        'Lads at Liam VDHs Wedding.JPG',
+        'Shortys.JPG',
+        'Squad at Guerite.JPG',
+        'Squad Cloud9.jpeg',
+        'Takalads.jpeg'
     ];
 
-    gallery.innerHTML = photos.map(photo => `
+    gallery.innerHTML = photos.map(photo => {
+        const photoName = photo.replace(/\.(jpg|jpeg|JPG|JPEG)$/i, '').replace(/\s+/g, ' ');
+        return `
         <div class="gallery-item">
-            <img src="assets/images/photos/${photo}" alt="Photo" loading="lazy" onerror="console.error('Failed to load gallery photo:', 'assets/images/photos/${photo}'); this.parentElement.style.display='none';">
+            <img src="assets/images/photos/${photo}" alt="${photoName} - Garrett Wolfe Photography" loading="lazy" onerror="console.error('Failed to load gallery photo:', 'assets/images/photos/${photo}'); this.parentElement.style.display='none';">
         </div>
-    `).join('');
+    `;
+    }).join('');
 
     console.log('Photo gallery loaded with', photos.length, 'photos');
 
