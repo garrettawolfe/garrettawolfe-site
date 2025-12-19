@@ -8,314 +8,402 @@
     <title>Garrett Wolfe</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+    <body>
+        <!-- Murmuration Background -->
+        <canvas id="murmurationCanvas" class="murmuration-canvas"></canvas>
     <!-- Background Music -->
     <audio id="backgroundMusic" loop>
-        <source src="assets/audio/background-music.mp3" type="audio/mpeg">
-        <source src="assets/audio/background-music.ogg" type="audio/ogg">
+        <source src="assets/audio/ease my mind.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Navigation / Music Control -->
-    <nav class="top-nav">
-        <div class="nav-content">
-            <div class="music-control">
-                <button id="musicToggle" class="music-btn" aria-label="Toggle background music">
-                    <span class="music-icon">🎵</span>
-                    <span class="music-text">Music</span>
+    <!-- Tron-like Corner Effects -->
+    <div class="tron-corner tron-top-left"></div>
+    <div class="tron-corner tron-top-right"></div>
+    <div class="tron-corner tron-bottom-left"></div>
+    <div class="tron-corner tron-bottom-right"></div>
+
+    <!-- Header with Name -->
+    <header class="main-header" id="mainHeader">
+        <div class="header-content">
+            <h1 class="header-name">Garrett Wolfe</h1>
+            <div class="music-controls">
+                <button id="musicPrev" class="music-control-btn" aria-label="Previous song">
+                    <i data-lucide="skip-back"></i>
+                </button>
+                <button id="musicToggle" class="music-control-btn" aria-label="Toggle background music">
+                    <i data-lucide="pause"></i>
+                </button>
+                <button id="musicNext" class="music-control-btn" aria-label="Next song">
+                    <i data-lucide="skip-forward"></i>
                 </button>
             </div>
         </div>
+    </header>
+
+    <!-- Custom Scrollbar Track -->
+    <div class="scrollbar-track" id="scrollbarTrack">
+        <div class="scrollbar-thumb" id="scrollbarThumb"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="heroSection">
+            <div class="hero-photo-collage" id="heroCollage">
+                <!-- Photos will be loaded dynamically -->
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-name">Garrett Wolfe</h1>
+                <div class="hero-tagline">
+                    <p>growth guy that builds cool growth systems and collabs with awesome folks</p>
+                    <p>serious pasta chef, movie enthusiast, nyc restaurant critique, avid solo traveler</p>
+                    <p>based in nyc today</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Substack Posts -->
+        <section class="substack-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i data-lucide="book-open"></i>
+                    <span>Latest from Substack</span>
+                </h2>
+                <div class="substack-grid" id="substackPosts">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interests & Favorites -->
+        <section class="interests-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i data-lucide="heart"></i>
+                    <span>Wolfe's Favorites</span>
+                </h2>
+                
+                <div class="favorites-container">
+                    <div class="favorite-category">
+                        <h3 class="category-title">
+                            <i data-lucide="utensils"></i>
+                            Restaurants
+                        </h3>
+                        <ul class="favorite-list">
+                            <li>L'artusi <span class="location">(West Village)</span></li>
+                            <li>Cervos <span class="location">(Dimes Square)</span></li>
+                            <li>Potluck Club <span class="location">(LES)</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="favorite-category">
+                        <h3 class="category-title">
+                            <i data-lucide="glass-water"></i>
+                            Bars
+                        </h3>
+                        <ul class="favorite-list">
+                            <li>The Mulberry <span class="location">(filthy dirty martini)</span></li>
+                            <li>Elvis <span class="location">(Noho)</span></li>
+                            <li>Pearlbox <span class="location">(SoHo)</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="favorite-category">
+                        <h3 class="category-title">
+                            <i data-lucide="map-pin"></i>
+                            Travel
+                        </h3>
+                        <div class="travel-grid">
+                            <div>
+                                <h4>Favorite Spots</h4>
+                                <ul class="favorite-list">
+                                    <li>Capri, Italy</li>
+                                    <li>Santa Teresa, Costa Rica</li>
+                                    <li>Japan</li>
+                                    <li>Koh Phangan, Thailand</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Up Next</h4>
+                                <ul class="favorite-list">
+                                    <li>Niseko, Japan <span class="location">(skiing)</span></li>
+                                    <li>South Korea <span class="location">(food)</span></li>
+                                    <li>Philippines <span class="location">(sights)</span></li>
+                                    <li>Stockholm</li>
+                                    <li>Biarritz</li>
+                                    <li>Menorca</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="favorite-category music-playlist">
+                        <h3 class="category-title">
+                            <i data-lucide="music"></i>
+                            Music
+                        </h3>
+                        <div class="playlist" id="musicPlaylist">
+                            <!-- Playlist will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="experience-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i data-lucide="briefcase"></i>
+                    <span>Experience</span>
+                </h2>
+                
+                <!-- Current Experiences Side by Side -->
+                <div class="current-experiences">
+                    <!-- Current: OneGTM Consulting -->
+                    <div class="experience-card current">
+                        <div class="experience-header">
+                            <div class="company-info">
+                                <img src="assets/images/logos/OneGTM Logo.png" alt="OneGTM" class="company-logo">
+                                <div class="company-details">
+                                <h3 class="company-name">OneGTM</h3>
+                                <p class="role-title">Founder & GTM Engineer</p>
+                                <p class="time-period">Sep 2025 - Present</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="experience-content">
+                            <p class="experience-description">
+                                I help early and growth-stage companies build durable, signal-driven RevOps and outbound systems. My work focuses on defining a clear ICP, creating scored target account lists, wiring intent and engagement signals into the CRM, and standing up scalable outbound infrastructure across email and LinkedIn.
+                            </p>
+                            <p class="experience-description">
+                                Rather than brute-force volume, I prioritize signal creation, orchestration, and clean RevOps plumbing so teams know exactly who to reach, when, and why. Engagements typically include ICP discovery, CRM configuration, account scoring, lightweight signal automation, and deliverable outbound setup that teams can operate and scale long after the project ends.
+                            </p>
+                            <p class="experience-description">
+                                The end result is not just outbound experiments, but a repeatable, best-practice RevOps foundation that supports growth across channels.
+                            </p>
+                            <div class="experience-tags">
+                                <span class="tag">ICP Discovery</span>
+                                <span class="tag">CRM Configuration</span>
+                                <span class="tag">Account Scoring</span>
+                                <span class="tag">Signal Automation</span>
+                                <span class="tag">Outbound Infrastructure</span>
+                            </div>
+                            <div class="tools-section">
+                                <p class="tools-intro">Tools: Clay, n8n, Cursor, RB2B, email infra, and more.</p>
+                                <p class="clients-intro">Clients: SuperDial (voice AI for healthcare), Stuut (AR automation), Default (inbound scheduling), Lindapter (UK construction Co), Green Dock Partners (PE firm), and others.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current: Looking for Co-founder -->
+                    <div class="experience-card current cofounder">
+                    <div class="experience-header">
+                        <div class="company-info">
+                            <div class="company-logo-placeholder">
+                                <i data-lucide="rocket"></i>
+                            </div>
+                            <div class="company-details">
+                                <h3 class="company-name">Looking for Technical Co-founder</h3>
+                                <p class="role-title">Entrepreneur</p>
+                                <p class="time-period">Current</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <p class="experience-description">
+                            I'm looking for a technical co-founder to build something ambitious and incredible together in NYC!
+                        </p>
+                        <div class="cofounder-details">
+                            <h4>What I'm looking for:</h4>
+                            <ul>
+                                <li><strong>Technical expertise</strong> - Full stack, with a sense for the best way to build things (no cutting corners)</li>
+                                <li><strong>Collaborative</strong> - Love bouncing ideas around, feedback on my areas is great, but we shouldn't compete for the same role</li>
+                                <li><strong>Challenging</strong> - Not afraid to question my thinking, but always in a constructive way</li>
+                                <li><strong>Culture-driven</strong> - Cares about building a strong culture and brand that people are drawn to</li>
+                            </ul>
+                            <h4>Ideas I'm exploring:</h4>
+                            <ul>
+                                <li>Product operations and customer success</li>
+                                <li>Voice AI - like Assort Health but for other industries</li>
+                                <li>SaaS for tech-enabled businesses</li>
+                            </ul>
+                            <p><strong>Interested?</strong> Reach out at <a href="mailto:GarrettWolfe.work@gmail.com?subject=GW%20Website%20Inquiry">GarrettWolfe.work@gmail.com</a></p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Past Experiences Grid -->
+                <div class="past-experiences-grid">
+                <div class="experience-card past">
+                    <div class="experience-header">
+                        <div class="company-info">
+                            <img src="assets/images/logos/Galaxy Logo.jpeg" alt="Galaxy" class="company-logo">
+                            <div class="company-details">
+                                <h3 class="company-name">Galaxy</h3>
+                                <p class="role-title">Co-Founder & CRO</p>
+                                <p class="time-period">May 2025 - Sep 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <p class="experience-description">
+                            Co-founded and built Galaxy - a modern data platform with context-aware AI, collaboration, and access controls. Led 5-person team and built multi-channel growth engine from zero with SEO and AEO optimized content, generating 2.5M+ impressions and 12K+ clicks per month.
+                        </p>
+                        <ul class="experience-notes">
+                            <li>Drove GTM strategy with 500+ customer calls, 15+ design partners, and a 2,500+ person waitlist - all bootstrapped</li>
+                            <li>Built growth engine generating 2.5M+ impressions and 12K+ clicks per month</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-card past">
+                    <div class="experience-header">
+                        <div class="company-info">
+                            <img src="assets/images/logos/Unify Logo.jpeg" alt="Unify" class="company-logo">
+                            <div class="company-details">
+                                <h3 class="company-name">Unify</h3>
+                                <p class="role-title">Growth & Bizops - 9th Employee</p>
+                                <p class="time-period">Apr 2024 - Jun 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <p class="experience-description">
+                            Spearheaded growth strategy and execution at an early-stage GTM software startup from $400K to over $6M ARR. Built automated outbound program from 0 to $15M+ in pipeline within 12 months. Launched core GTM programs across Partnerships, RevOps, Inbound, and Sales Enablement.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-card past">
+                    <div class="experience-header">
+                        <div class="company-info">
+                            <div class="company-logo-placeholder">
+                                <i data-lucide="trending-up"></i>
+                            </div>
+                            <div class="company-details">
+                                <h3 class="company-name">TZP Group</h3>
+                                <p class="role-title">Growth Equity Associate</p>
+                                <p class="time-period">Aug 2022 - Mar 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <p class="experience-description">
+                            Sourced and diligenced Series A-B software and internet investments for TZP's Growth Equity Fund. Built internal tooling to automate outreach, tracking, and personalization.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-card past">
+                    <div class="experience-header">
+                        <div class="company-info">
+                            <img src="assets/images/logos/Morgan Stanley Logo.jpeg" alt="Morgan Stanley" class="company-logo">
+                            <div class="company-details">
+                                <h3 class="company-name">Morgan Stanley</h3>
+                                <p class="role-title">Investment Banking Analyst - Global Technology Group</p>
+                                <p class="time-period">Jul 2020 - Jul 2022</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <p class="experience-description">
+                            Executed IPO, M&A, and capital raises for public and private software and internet companies. Worked on multiple prospective IPO transactions in healthcare, low-code, travel/experience, and consumer spaces.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-card past">
+                    <div class="experience-header">
+                        <div class="company-info">
+                            <img src="assets/images/logos/Duke Logo.jpeg" alt="Duke University" class="company-logo">
+                            <div class="company-details">
+                                <h3 class="company-name">Duke University</h3>
+                                <p class="role-title">Computer Science</p>
+                                <p class="time-period">2016 - 2020</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <p class="experience-description">
+                            Computer Science degree.
+                        </p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Gallery -->
+        <section class="gallery-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i data-lucide="camera"></i>
+                    <span>Photos</span>
+                </h2>
+                <div class="gallery-grid" id="photoGallery">
+                    <!-- Photos will be loaded dynamically -->
+                </div>
+                <div class="gallery-footer">
+                    <a href="https://www.instagram.com/wolfe.film" target="_blank" rel="noopener noreferrer" class="film-link">
+                        <i data-lucide="instagram"></i>
+                        <span>Check out my film photography on Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Modal -->
+        <div class="photo-modal" id="photoModal">
+            <button class="modal-close" id="modalClose">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="modal-content">
+                <img id="modalImage" src="" alt="Photo">
+            </div>
+        </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Music Progress Bar -->
+    <div class="music-progress-container" id="musicProgressContainer">
+        <div class="music-progress-bar" id="musicProgressBar">
+            <div class="music-progress-fill" id="musicProgressFill"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Toolbar -->
+    <nav class="bottom-toolbar" id="bottomToolbar">
+        <div class="toolbar-content">
+            <a href="https://garrettawolfe.substack.com" target="_blank" rel="noopener noreferrer" class="toolbar-link">
+                <i data-lucide="book-open"></i>
+                <span>Substack</span>
+            </a>
+            <a href="https://www.linkedin.com/in/garrettawolfe" target="_blank" rel="noopener noreferrer" class="toolbar-link">
+                <i data-lucide="linkedin"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://x.com/garrettawolfe" target="_blank" rel="noopener noreferrer" class="toolbar-link">
+                <i data-lucide="twitter"></i>
+                <span>Twitter</span>
+            </a>
+            <a href="https://www.instagram.com/garrettawolfe" target="_blank" rel="noopener noreferrer" class="toolbar-link">
+                <i data-lucide="instagram"></i>
+                <span>Instagram</span>
+            </a>
+            <a href="https://www.instagram.com/wolfe.film" target="_blank" rel="noopener noreferrer" class="toolbar-link">
+                <i data-lucide="camera"></i>
+                <span>Film</span>
+            </a>
+        </div>
     </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-name">Garrett Wolfe</h1>
-            <p class="hero-tagline">Growth operator & entrepreneur building durable, signal-driven systems</p>
-            <div class="social-links">
-                <a href="https://garrettawolfe.substack.com" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <span class="social-icon">📝</span>
-                    <span>Substack</span>
-                </a>
-                <a href="https://www.linkedin.com/in/garrettawolfe" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <span class="social-icon">💼</span>
-                    <span>LinkedIn</span>
-                </a>
-                <a href="https://x.com/garrettawolfe" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <span class="social-icon">🐦</span>
-                    <span>Twitter</span>
-                </a>
-                <a href="https://www.instagram.com/garrettawolfe" target="_blank" rel="noopener noreferrer" class="social-link">
-                    <span class="social-icon">📷</span>
-                    <span>Instagram</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interests & Favorites -->
-    <section class="interests-section">
-        <div class="container">
-            <h2 class="section-title">Interests & Favorites</h2>
-            <div class="favorites-grid">
-                <div class="favorite-item">
-                    <span class="favorite-icon">🍝</span>
-                    <div class="favorite-content">
-                        <h3>Favorite NYC Restaurant</h3>
-                        <p>To be updated</p>
-                    </div>
-                </div>
-                <div class="favorite-item">
-                    <span class="favorite-icon">🎵</span>
-                    <div class="favorite-content">
-                        <h3>Favorite Current Song</h3>
-                        <p>To be updated</p>
-                    </div>
-                </div>
-                <div class="favorite-item">
-                    <span class="favorite-icon">🍸</span>
-                    <div class="favorite-content">
-                        <h3>Favorite Bar in Manhattan</h3>
-                        <p>To be updated</p>
-                    </div>
-                </div>
-                <div class="favorite-item">
-                    <span class="favorite-icon">✈️</span>
-                    <div class="favorite-content">
-                        <h3>Favorite Travel Place</h3>
-                        <p>To be updated</p>
-                    </div>
-                </div>
-                <div class="favorite-item">
-                    <span class="favorite-icon">🗺️</span>
-                    <div class="favorite-content">
-                        <h3>Next Travel Spot on Hitlist</h3>
-                        <p>To be updated</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section class="experience-section">
-        <div class="container">
-            <h2 class="section-title">Experience</h2>
-            
-            <!-- Current: OneGTM Consulting -->
-            <div class="experience-card current">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>OneGTM</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">OneGTM Consulting</h3>
-                            <p class="role-title">GTM Consultant</p>
-                            <p class="time-period">Current</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        I help early and growth-stage companies build durable, signal-driven RevOps and outbound systems. My work focuses on defining a clear ICP, creating scored target account lists, wiring intent and engagement signals into the CRM, and standing up scalable outbound infrastructure across email and LinkedIn.
-                    </p>
-                    <p class="experience-description">
-                        Rather than brute-force volume, I prioritize signal creation, orchestration, and clean RevOps plumbing so teams know exactly who to reach, when, and why. Engagements typically include ICP discovery, CRM configuration, account scoring, lightweight signal automation, and deliverable outbound setup that teams can operate and scale long after the project ends.
-                    </p>
-                    <p class="experience-description">
-                        The end result is not just outbound experiments, but a repeatable, best-practice RevOps foundation that supports growth across channels.
-                    </p>
-                    <div class="experience-tags">
-                        <span class="tag">ICP Discovery</span>
-                        <span class="tag">CRM Configuration</span>
-                        <span class="tag">Account Scoring</span>
-                        <span class="tag">Signal Automation</span>
-                        <span class="tag">Outbound Infrastructure</span>
-                    </div>
-                    <div class="tools-section">
-                        <p class="tools-intro">Tools: Clay, n8n, Cursor, RB2B, email infra, and more.</p>
-                        <p class="clients-intro">Clients: SuperDial (voice AI for healthcare), Stuut (AR automation), Default (inbound scheduling), Lindapter (UK construction Co), Green Dock Partners (PE firm), and others.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Current: Looking for Co-founder -->
-            <div class="experience-card current cofounder">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>🚀</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">Looking for Technical Co-founder</h3>
-                            <p class="role-title">Entrepreneur</p>
-                            <p class="time-period">Current</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        I'm looking for a technical co-founder to build something ambitious and incredible together in NYC!
-                    </p>
-                    <div class="cofounder-details">
-                        <h4>What I'm looking for:</h4>
-                        <ul>
-                            <li><strong>Technical expertise</strong> - Full stack, with a sense for the best way to build things (no cutting corners)</li>
-                            <li><strong>Collaborative</strong> - Love bouncing ideas around, feedback on my areas is great, but we shouldn't compete for the same role</li>
-                            <li><strong>Challenging</strong> - Not afraid to question my thinking, but always in a constructive way</li>
-                            <li><strong>Culture-driven</strong> - Cares about building a strong culture and brand that people are drawn to</li>
-                        </ul>
-                        <h4>Ideas I'm exploring:</h4>
-                        <ul>
-                            <li>Product operations and customer success</li>
-                            <li>Voice AI - like Assort Health but for other industries</li>
-                            <li>SaaS for tech-enabled businesses</li>
-                        </ul>
-                        <p><strong>Interested?</strong> Reach out at <a href="mailto:GarrettWolfe.work@gmail.com">GarrettWolfe.work@gmail.com</a></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Past Experiences -->
-            <div class="experience-card">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>Galaxy</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">Galaxy</h3>
-                            <p class="role-title">Co-founder & GTM Lead</p>
-                            <p class="time-period">2022 - Aug 2024</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        Co-founded and built Galaxy - the Cursor for Data. As the non-technical cofounder, I led everything outside of product: GTM, customer validation, fundraising, community, partnerships, and ops.
-                    </p>
-                    <ul class="experience-notes">
-                        <li>3.5K waitlist via automated outbound and inbound, SEO engine → 3M impressions / 15K+ clicks / hundreds of downloads per month</li>
-                        <li>Helped raise $4M from Caffeinated Capital and a number of other incredible angels</li>
-                        <li>Stepped away in late August 2024 to explore new ideas</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-card">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>Unify</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">Unify</h3>
-                            <p class="role-title">First Business & Growth Hire (Employee #9)</p>
-                            <p class="time-period">2021 - 2022</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        Modern sales automation platform. Lead the GTM engineering efforts and also did all things finance, ops, customer success, and more.
-                    </p>
-                    <ul class="experience-notes">
-                        <li>Generated $15M+ pipeline</li>
-                        <li>Scaled company from 9 to 60+ in 13 months</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="experience-card">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>VC</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">Venture Capital</h3>
-                            <p class="role-title">Series A/B Investing</p>
-                            <p class="time-period">2020 - 2021</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        Worked in venture capital doing Series A/B investing.
-                    </p>
-                </div>
-            </div>
-
-            <div class="experience-card">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>MS</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">Morgan Stanley</h3>
-                            <p class="role-title">Tech Investment Banking</p>
-                            <p class="time-period">2020</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        Worked in tech investment banking in NYC.
-                    </p>
-                </div>
-            </div>
-
-            <div class="experience-card">
-                <div class="experience-header">
-                    <div class="company-info">
-                        <div class="company-logo-placeholder">
-                            <span>Duke</span>
-                        </div>
-                        <div class="company-details">
-                            <h3 class="company-name">Duke University</h3>
-                            <p class="role-title">Computer Science</p>
-                            <p class="time-period">2016 - 2020</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="experience-content">
-                    <p class="experience-description">
-                        Graduated with a degree in Computer Science.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Photo Gallery -->
-    <section class="gallery-section">
-        <div class="container">
-            <h2 class="section-title">Photos</h2>
-            <div class="gallery-grid" id="photoGallery">
-                <!-- Photos will be added here -->
-                <div class="gallery-placeholder">
-                    <p>Photos coming soon...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>© 2024 Garrett Wolfe</p>
-            <p class="footer-contact">
-                <a href="mailto:GarrettWolfe.work@gmail.com">GarrettWolfe.work@gmail.com</a>
-            </p>
-        </div>
-    </footer>
 
     <script src="scripts/main.js"></script>
 </body>
 </html>
-
