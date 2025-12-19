@@ -58,8 +58,38 @@
       },
       "worksFor": {
         "@type": "Organization",
-        "name": "OneGTM"
+        "name": "OneGTM",
+        "url": "https://garrettawolfe.com"
       }
+    }
+    </script>
+    
+    <!-- Organization Schema for OneGTM -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "OneGTM",
+      "url": "https://garrettawolfe.com",
+      "founder": {
+        "@type": "Person",
+        "name": "Garrett Wolfe"
+      },
+      "description": "GTM consulting and RevOps engineering for early and growth-stage companies"
+    }
+    </script>
+    
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://garrettawolfe.com"
+      }]
     }
     </script>
     
@@ -67,12 +97,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="alternate" type="application/rss+xml" title="Garrett Wolfe's Substack" href="https://garrettawolfe.substack.com/feed">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <!-- Preload critical resources -->
     <link rel="preload" href="styles/main.css" as="style">
     <link rel="preload" href="scripts/main.js" as="script">
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://www.linkedin.com">
+    <link rel="preconnect" href="https://www.instagram.com">
+    <link rel="preconnect" href="https://garrettawolfe.substack.com">
+    <link rel="preconnect" href="https://x.com">
+    <link rel="preconnect" href="https://api.rss2json.com">
+    
+    <!-- Enhanced Meta Tags -->
+    <meta property="og:site_name" content="Garrett Wolfe">
+    <meta name="theme-color" content="#6366f1">
     
     <!-- RB2B Tracking Pixel -->
     <script>
@@ -85,8 +130,18 @@
             document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]);
         }("W6Z57HZZVZOX");
     </script>
-</head>
+    </head>
     <body>
+        <!-- Loading Skeleton -->
+        <div id="loadingSkeleton" class="loading-skeleton">
+            <div class="skeleton-header"></div>
+            <div class="skeleton-hero">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line"></div>
+            </div>
+        </div>
+        
         <!-- Murmuration Background -->
         <canvas id="murmurationCanvas" class="murmuration-canvas"></canvas>
     <!-- Background Music -->
@@ -143,6 +198,26 @@
                     <i data-lucide="message-circle"></i>
                     <span>Get in Touch</span>
                 </a>
+            </div>
+        </section>
+
+        <!-- Animated Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="30" data-suffix="M+">0</div>
+                        <div class="stat-label">Pipeline Generated Through GTME</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="325" data-suffix="+">0</div>
+                        <div class="stat-label">Restaurants Dined at in NYC</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="400" data-suffix="+">0</div>
+                        <div class="stat-label">Hours Biked on Citibikes</div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -296,7 +371,7 @@
                     <div class="experience-card current">
                         <div class="experience-header">
                             <div class="company-info">
-                                <img src="assets/images/logos/OneGTM Logo.png" alt="OneGTM" class="company-logo">
+                                <img src="assets/images/logos/OneGTM Logo.png" alt="OneGTM" class="company-logo" width="60" height="60" loading="eager">
                                 <div class="company-details">
                                 <h3 class="company-name">OneGTM</h3>
                                 <p class="role-title">Founder & GTM Engineer</p>
@@ -372,7 +447,7 @@
                 <div class="experience-card past">
                     <div class="experience-header">
                         <div class="company-info">
-                            <img src="assets/images/logos/Galaxy Logo.jpeg" alt="Galaxy" class="company-logo">
+                            <img src="assets/images/logos/Galaxy Logo.jpeg" alt="Galaxy" class="company-logo" width="60" height="60" loading="lazy">
                             <div class="company-details">
                                 <h3 class="company-name">Galaxy</h3>
                                 <p class="role-title">Co-Founder & CRO</p>
@@ -394,7 +469,7 @@
                 <div class="experience-card past">
                     <div class="experience-header">
                         <div class="company-info">
-                            <img src="assets/images/logos/Unify Logo.jpeg" alt="Unify" class="company-logo">
+                            <img src="assets/images/logos/Unify Logo.jpeg" alt="Unify" class="company-logo" width="60" height="60" loading="lazy">
                             <div class="company-details">
                                 <h3 class="company-name">Unify</h3>
                                 <p class="role-title">Growth & Bizops - 9th Employee</p>
@@ -499,6 +574,33 @@
             </div>
         </section>
 
+        <!-- Interactive Travel Map Section -->
+        <section class="travel-map-section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i data-lucide="map-pin"></i>
+                    <span>Places I've Traveled</span>
+                </h2>
+                <div class="travel-map-container">
+                    <div id="travelMap" class="travel-map"></div>
+                    <div class="travel-map-legend">
+                        <div class="legend-item">
+                            <span class="legend-marker favorite"></span>
+                            <span>Favorite Spots</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-marker visited"></span>
+                            <span>Visited</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-marker bucket-list"></span>
+                            <span>Bucket List</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Photo Modal -->
         <div class="photo-modal" id="photoModal">
             <button class="modal-close" id="modalClose">
@@ -508,9 +610,43 @@
                 <img id="modalImage" src="" alt="Photo">
             </div>
         </div>
-            </div>
-        </section>
     </main>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i data-lucide="arrow-up"></i>
+    </button>
+
+    <!-- Dark/Light Mode Toggle -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="sun" class="theme-icon-light"></i>
+        <i data-lucide="moon" class="theme-icon-dark"></i>
+    </button>
+
+    <!-- Easter Eggs Button -->
+    <button id="easterEggsButton" class="easter-eggs-button" aria-label="Easter eggs">
+        <i data-lucide="egg"></i>
+    </button>
+
+    <!-- Easter Eggs Modal -->
+    <div id="easterEggsModal" class="easter-eggs-modal">
+        <div class="easter-eggs-modal-content">
+            <button class="easter-eggs-close" id="easterEggsClose">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>
+                <i data-lucide="egg"></i>
+                <span>Easter Eggs</span>
+            </h2>
+            <p class="easter-eggs-intro">Discover hidden interactions on the site!</p>
+            <div class="easter-eggs-list" id="easterEggsList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cursor Trail Container -->
+    <div id="cursorTrail" class="cursor-trail"></div>
 
     <!-- Music Progress Bar -->
     <div class="music-progress-container" id="musicProgressContainer">
