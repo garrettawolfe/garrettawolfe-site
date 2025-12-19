@@ -1,22 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/Person">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Garrett Wolfe - Growth operator, entrepreneur, and GTM consultant. Building durable, signal-driven RevOps systems.">
-    <meta name="keywords" content="Garrett Wolfe, GTM consultant, RevOps, Growth operator, NYC entrepreneur">
-    <title>Garrett Wolfe</title>
+    <meta name="description" content="Garrett Wolfe - Growth operator, entrepreneur, and GTM consultant. Building durable, signal-driven RevOps systems. Based in NYC.">
+    <meta name="keywords" content="Garrett Wolfe, GTM consultant, RevOps, Growth operator, NYC entrepreneur, OneGTM, Galaxy, Unify, GTM engineering, outbound sales, signal-driven growth">
+    <meta name="author" content="Garrett Wolfe">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="geo.region" content="US-NY">
+    <meta name="geo.placename" content="New York">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://garrettawolfe.com/">
+    <meta property="og:title" content="Garrett Wolfe - Growth Operator & Entrepreneur">
+    <meta property="og:description" content="Growth operator, entrepreneur, and GTM consultant. Building durable, signal-driven RevOps systems.">
+    <meta property="og:image" content="https://garrettawolfe.com/assets/images/photos/IMG_1542.JPG">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://garrettawolfe.com/">
+    <meta property="twitter:title" content="Garrett Wolfe - Growth Operator & Entrepreneur">
+    <meta property="twitter:description" content="Growth operator, entrepreneur, and GTM consultant. Building durable, signal-driven RevOps systems.">
+    <meta property="twitter:image" content="https://garrettawolfe.com/assets/images/photos/IMG_1542.JPG">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤤</text></svg>">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://garrettawolfe.com/">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Garrett Wolfe",
+      "jobTitle": "Growth Operator & GTM Consultant",
+      "url": "https://garrettawolfe.com",
+      "sameAs": [
+        "https://www.linkedin.com/in/garrettawolfe",
+        "https://garrettawolfe.substack.com",
+        "https://x.com/garrettawolfe",
+        "https://www.instagram.com/garrettawolfe"
+      ],
+      "email": "GarrettWolfe.work@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "New York",
+        "addressRegion": "NY",
+        "addressCountry": "US"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Duke University"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "OneGTM"
+      }
+    }
+    </script>
+    
+    <title>Garrett Wolfe - Growth Operator & Entrepreneur</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles/main.css" as="style">
+    <link rel="preload" href="scripts/main.js" as="script">
+    
+    <!-- RB2B Tracking Pixel -->
+    <script>
+        !function(key) {
+            if (window.reb2b) return;
+            window.reb2b = {loaded: true};
+            var s = document.createElement("script");
+            s.async = true;
+            s.src = "https://ddwl4m2hdecbv.cloudfront.net/b/" + key + "/" + key + ".js.gz";
+            document.getElementsByTagName("script")[0].parentNode.insertBefore(s, document.getElementsByTagName("script")[0]);
+        }("W6Z57HZZVZOX");
+    </script>
 </head>
     <body>
         <!-- Murmuration Background -->
         <canvas id="murmurationCanvas" class="murmuration-canvas"></canvas>
     <!-- Background Music -->
-    <audio id="backgroundMusic" loop>
+    <audio id="backgroundMusic" autoplay loop>
         <source src="assets/audio/ease my mind.mp3" type="audio/mpeg">
     </audio>
 
@@ -50,7 +124,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" itemscope itemtype="https://schema.org/Person">
         <!-- Hero Section -->
         <section class="hero" id="heroSection">
             <div class="hero-photo-collage" id="heroCollage">
@@ -71,7 +145,7 @@
             <div class="container">
                 <h2 class="section-title">
                     <i data-lucide="book-open"></i>
-                    <span>Latest from Substack</span>
+                    <span>Latest Writing from Garrett's Substack</span>
                 </h2>
                 <div class="substack-grid" id="substackPosts">
                     <div class="loading">Loading posts...</div>
@@ -88,7 +162,7 @@
                 </h2>
                 
                 <div class="favorites-container">
-                    <div class="favorite-category">
+                    <div class="favorite-category restaurants-glow">
                         <h3 class="category-title">
                             <i data-lucide="utensils"></i>
                             Restaurants
@@ -100,7 +174,7 @@
                         </ul>
                     </div>
 
-                    <div class="favorite-category">
+                    <div class="favorite-category bars-glow">
                         <h3 class="category-title">
                             <i data-lucide="glass-water"></i>
                             Bars
@@ -112,33 +186,32 @@
                         </ul>
                     </div>
 
-                    <div class="favorite-category">
+                    <div class="favorite-category travel-glow">
                         <h3 class="category-title">
                             <i data-lucide="map-pin"></i>
-                            Travel
+                            Favorite Travel Spots
                         </h3>
-                        <div class="travel-grid">
-                            <div>
-                                <h4>Favorite Spots</h4>
-                                <ul class="favorite-list">
-                                    <li>Capri, Italy</li>
-                                    <li>Santa Teresa, Costa Rica</li>
-                                    <li>Japan</li>
-                                    <li>Koh Phangan, Thailand</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4>Up Next</h4>
-                                <ul class="favorite-list">
-                                    <li>Niseko, Japan <span class="location">(skiing)</span></li>
-                                    <li>South Korea <span class="location">(food)</span></li>
-                                    <li>Philippines <span class="location">(sights)</span></li>
-                                    <li>Stockholm</li>
-                                    <li>Biarritz</li>
-                                    <li>Menorca</li>
-                                </ul>
-                            </div>
-                        </div>
+                        <ul class="favorite-list">
+                            <li>Capri, Italy</li>
+                            <li>Santa Teresa, Costa Rica</li>
+                            <li>Japan</li>
+                            <li>Koh Phangan, Thailand</li>
+                        </ul>
+                    </div>
+
+                    <div class="favorite-category travel-glow">
+                        <h3 class="category-title">
+                            <i data-lucide="plane"></i>
+                            Spots I'm Dying to Go
+                        </h3>
+                        <ul class="favorite-list">
+                            <li>Niseko, Japan <span class="location">(skiing)</span></li>
+                            <li>South Korea <span class="location">(food)</span></li>
+                            <li>Philippines <span class="location">(sights)</span></li>
+                            <li>Stockholm</li>
+                            <li>Biarritz</li>
+                            <li>Menorca</li>
+                        </ul>
                     </div>
 
                     <div class="favorite-category music-playlist">
@@ -149,6 +222,41 @@
                         <div class="playlist" id="musicPlaylist">
                             <!-- Playlist will be loaded dynamically -->
                         </div>
+                    </div>
+
+                    <div class="favorite-category network-glow">
+                        <h3 class="category-title">
+                            <i data-lucide="users"></i>
+                            My Network
+                        </h3>
+                        <div class="network-links">
+                            <a href="https://airtable.com/appLoZp49vl8pesxl/shrSJcOqL1GFXCyVb" target="_blank" rel="noopener noreferrer" class="network-link">
+                                <i data-lucide="building"></i>
+                                <span>Teams Garrett Knows</span>
+                            </a>
+                            <a href="https://airtable.com/appLoZp49vl8pesxl/shrSJcOqL1GFXCyVb" target="_blank" rel="noopener noreferrer" class="network-link">
+                                <i data-lucide="briefcase"></i>
+                                <span>Jobs at Teams Garrett Knows</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="favorite-category movies-glow">
+                        <h3 class="category-title">
+                            <i data-lucide="film"></i>
+                            Favorite Movies
+                        </h3>
+                        <ul class="favorite-list">
+                            <li>Guardians of the Galaxy 1</li>
+                            <li>About Time</li>
+                            <li>Iron Man 1</li>
+                            <li>Top Gun</li>
+                            <li>The Kingsman</li>
+                            <li>Superbad</li>
+                            <li>The Other Guys</li>
+                            <li>Thor 3</li>
+                            <li>The Prestige</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -283,9 +391,7 @@
                 <div class="experience-card past">
                     <div class="experience-header">
                         <div class="company-info">
-                            <div class="company-logo-placeholder">
-                                <i data-lucide="trending-up"></i>
-                            </div>
+                            <img src="assets/images/logos/TZP Group.jpeg" alt="TZP Group" class="company-logo">
                             <div class="company-details">
                                 <h3 class="company-name">TZP Group</h3>
                                 <p class="role-title">Growth Equity Associate</p>
@@ -354,6 +460,7 @@
                         <i data-lucide="instagram"></i>
                         <span>Check out my film photography on Instagram</span>
                     </a>
+                    <p class="designer-credit">designed by me (gw) x Cursor at 2AM on a weeknight</p>
                 </div>
             </div>
         </section>

@@ -568,6 +568,140 @@ body::before {
     opacity: 0.3;
 }
 
+/* Colored Glows for Favorite Categories */
+.favorite-category.restaurants-glow {
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+.favorite-category.restaurants-glow::before {
+    background: radial-gradient(circle 150px at center, rgba(239, 68, 68, 0.6) 0%, transparent 70%);
+}
+
+.favorite-category.restaurants-glow:hover {
+    border-color: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+}
+
+.favorite-category.bars-glow {
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.favorite-category.bars-glow::before {
+    background: radial-gradient(circle 150px at center, rgba(59, 130, 246, 0.6) 0%, transparent 70%);
+}
+
+.favorite-category.bars-glow:hover {
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+}
+
+.favorite-category.travel-glow {
+    border-color: rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+}
+
+.favorite-category.travel-glow::before {
+    background: radial-gradient(circle 150px at center, rgba(34, 197, 94, 0.6) 0%, transparent 70%);
+}
+
+.favorite-category.travel-glow:hover {
+    border-color: rgba(34, 197, 94, 0.6);
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
+}
+
+.favorite-category.network-glow {
+    border-color: rgba(249, 115, 22, 0.3);
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+}
+
+.favorite-category.network-glow::before {
+    background: radial-gradient(circle 150px at center, rgba(249, 115, 22, 0.6) 0%, transparent 70%);
+}
+
+.favorite-category.network-glow:hover {
+    border-color: rgba(249, 115, 22, 0.6);
+    box-shadow: 0 8px 24px rgba(249, 115, 22, 0.4);
+}
+
+.favorite-category.movies-glow {
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.favorite-category.movies-glow::before {
+    background: radial-gradient(circle 150px at center, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
+}
+
+.favorite-category.movies-glow:hover {
+    border-color: rgba(139, 92, 246, 0.6);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.network-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.network-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.network-link::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle 100px at center, rgba(249, 115, 22, 0.4) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    transform: translate(-50%, -50%);
+}
+
+.network-link:hover::before {
+    opacity: 0.5;
+}
+
+.network-link:hover {
+    background: rgba(249, 115, 22, 0.15);
+    border-color: rgba(249, 115, 22, 0.5);
+    transform: translateX(4px);
+}
+
+.network-link i {
+    width: 18px;
+    height: 18px;
+    position: relative;
+    z-index: 1;
+    color: rgba(249, 115, 22, 0.8);
+}
+
+.network-link span {
+    position: relative;
+    z-index: 1;
+    font-size: 0.8125rem;
+}
+
 .category-title {
     font-size: 0.9375rem;
     font-weight: 600;
@@ -1125,6 +1259,10 @@ body::before {
 
 .gallery-footer {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 .film-link {
@@ -1144,6 +1282,18 @@ body::before {
 .film-link i {
     width: 16px;
     height: 16px;
+}
+
+.designer-credit {
+    font-family: 'Kalam', 'Comic Sans MS', 'Marker Felt', cursive;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin: 0;
+    opacity: 0.7;
+    letter-spacing: 0.5px;
+    font-weight: 300;
+    transform: rotate(-0.5deg);
 }
 
 /* Music Progress Bar */

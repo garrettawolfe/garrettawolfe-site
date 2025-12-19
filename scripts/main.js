@@ -30,6 +30,7 @@ function loadTrack(index) {
     if (index >= playlist.length) index = 0;
     currentTrackIndex = index;
     backgroundMusic.src = `assets/audio/${playlist[index].file}`;
+    backgroundMusic.load(); // Ensure the track is loaded
     updatePlaylistUI();
 }
 
@@ -62,17 +63,19 @@ function updateMusicControls() {
         console.error('musicToggle not found');
         return;
     }
-    const pauseIcon = musicToggle.querySelector('i');
-    if (!pauseIcon) {
-        console.error('pause icon not found in musicToggle');
-        return;
-    }
     
+    // Clear all content first
+    musicToggle.innerHTML = '';
+    
+    // Create new icon element
+    const newIcon = document.createElement('i');
     const iconName = isPlaying ? 'pause' : 'play';
-    pauseIcon.setAttribute('data-lucide', iconName);
+    newIcon.setAttribute('data-lucide', iconName);
+    musicToggle.appendChild(newIcon);
     
-    // Force lucide to recreate the icon
-    lucide.createIcons();
+    // Force lucide to recreate the icon - but only for this button
+    const icons = musicToggle.querySelectorAll('[data-lucide]');
+    lucide.createIcons(icons);
     
     console.log('Music controls updated, isPlaying:', isPlaying, 'icon:', iconName);
 }
@@ -95,14 +98,14 @@ function playMusic() {
             updateMusicControls();
             console.log('Music playing, isPlaying:', isPlaying);
             
-            // Gradual volume increase over 7 seconds
-            backgroundMusic.volume = 0;
+            // Gradual volume increase over 6 seconds
+            backgroundMusic.volume = 0.1; // Start immediately at low volume
             clearInterval(volumeFadeInterval);
-            let volume = 0;
+            let volume = 0.1;
             const targetVolume = 0.3;
-            const fadeDuration = 7000; // 7 seconds
+            const fadeDuration = 6000; // 6 seconds
             const steps = 100;
-            const volumeStep = targetVolume / steps;
+            const volumeStep = (targetVolume - 0.1) / steps;
             const timeStep = fadeDuration / steps;
             
             volumeFadeInterval = setInterval(() => {
@@ -165,9 +168,15 @@ function setupMusicControls() {
     }
 
     backgroundMusic.addEventListener('ended', function() {
-        loadTrack(currentTrackIndex + 1);
+        // Move to next track (will loop back to 0 if at end)
+        const nextIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(nextIndex);
         if (isPlaying) {
-            playMusic();
+            // Wait for track to load, then play
+            backgroundMusic.addEventListener('canplay', function playNext() {
+                backgroundMusic.removeEventListener('canplay', playNext);
+                playMusic();
+            }, { once: true });
         }
     });
 
@@ -192,18 +201,90 @@ function setupMusicControls() {
     loadTrack(0);
     updateMusicControls();
 
-    // Auto-play attempt
+    // Auto-play immediately - start at low volume and fade in
+    function startMusicWithFade() {
+        if (isPlaying) return; // Already playing
+        
+        backgroundMusic.volume = 0.1;
+        const playPromise = backgroundMusic.play();
+        
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    isPlaying = true;
+                    updateMusicControls();
+                    // Then fade in volume over 6 seconds
+                    let volume = 0.1;
+                    const targetVolume = 0.3;
+                    const fadeDuration = 6000;
+                    const steps = 100;
+                    const volumeStep = (targetVolume - 0.1) / steps;
+                    const timeStep = fadeDuration / steps;
+                    
+                    volumeFadeInterval = setInterval(() => {
+                        volume += volumeStep;
+                        if (volume >= targetVolume) {
+                            volume = targetVolume;
+                            clearInterval(volumeFadeInterval);
+                        }
+                        backgroundMusic.volume = volume;
+                    }, timeStep);
+                })
+                .catch(error => {
+                    console.log('Auto-play prevented:', error);
+                    // Try multiple strategies to start playback
+                    // Strategy 1: Try again after a short delay
+                    setTimeout(() => {
+                        if (!isPlaying) {
+                            startMusicWithFade();
+                        }
+                    }, 500);
+                    
+                    // Strategy 2: Try on any user interaction
+                    const tryPlayOnInteraction = () => {
+                        if (!isPlaying) {
+                            startMusicWithFade();
+                        }
+                    };
+                    document.addEventListener('click', tryPlayOnInteraction, { once: true });
+                    document.addEventListener('touchstart', tryPlayOnInteraction, { once: true });
+                    document.addEventListener('keydown', tryPlayOnInteraction, { once: true });
+                    document.addEventListener('mousemove', tryPlayOnInteraction, { once: true });
+                });
+        }
+    }
+    
+    // Try to start immediately - multiple attempts
+    // First attempt: immediate
     setTimeout(() => {
-        if (!hasInteracted) {
-            playMusic();
-        }
-    }, 500);
-
-    document.addEventListener('click', function() {
-        if (!hasInteracted && !isPlaying) {
-            playMusic();
-        }
-    }, { once: true });
+        startMusicWithFade();
+    }, 100);
+    
+    // Second attempt: after DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (!isPlaying) {
+                    startMusicWithFade();
+                }
+            }, 200);
+        });
+    } else {
+        setTimeout(() => {
+            if (!isPlaying) {
+                startMusicWithFade();
+            }
+        }, 200);
+    }
+    
+    // Third attempt: after window load
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (!isPlaying) {
+                startMusicWithFade();
+            }
+        }, 300);
+    });
 }
 
 // Hero Photo Collage with Flipping Cards
@@ -250,24 +331,14 @@ function loadHeroCollage() {
     
     console.log('Hero collage loaded with', shuffled.length, 'photos');
     
-    // Add flip on click and hover
+    // Add flip on hover (immediate, no delay)
     setTimeout(() => {
         collage.querySelectorAll('.hero-photo-card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.classList.toggle('flipped');
-            });
-            
-            // Auto-flip on hover after delay
-            let flipTimeout;
             card.addEventListener('mouseenter', function() {
-                flipTimeout = setTimeout(() => {
-                    if (!this.classList.contains('flipped')) {
-                        this.classList.add('flipped');
-                    }
-                }, 2000);
+                this.classList.add('flipped');
             });
             card.addEventListener('mouseleave', function() {
-                clearTimeout(flipTimeout);
+                this.classList.remove('flipped');
             });
         });
     }, 100);
@@ -314,7 +385,7 @@ function setupPhotoModal() {
 
 // Dynamic Hover Effects Based on Mouse Position
 function setupDynamicHover() {
-    const elements = document.querySelectorAll('.favorite-category, .toolbar-link, .playlist-item, .experience-card, .gallery-item');
+    const elements = document.querySelectorAll('.favorite-category, .toolbar-link, .playlist-item, .experience-card, .gallery-item, .network-link');
     
     elements.forEach(element => {
         element.addEventListener('mousemove', function(e) {

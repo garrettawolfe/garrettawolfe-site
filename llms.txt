@@ -1,0 +1,33 @@
+# llms.txt for garrettawolfe.com
+
+# About
+Garrett Wolfe is a growth operator, entrepreneur, and GTM consultant based in NYC. He helps early and growth-stage companies build durable, signal-driven RevOps and outbound systems.
+
+# Contact
+Email: GarrettWolfe.work@gmail.com
+LinkedIn: https://www.linkedin.com/in/garrettawolfe
+Substack: https://garrettawolfe.substack.com
+Twitter: https://x.com/garrettawolfe
+Instagram: https://www.instagram.com/garrettawolfe
+Film Photography: https://www.instagram.com/wolfe.film
+
+# Current Work
+- OneGTM: Founder & GTM Engineer (Sep 2025 - Present)
+- Looking for technical co-founder in NYC
+
+# Experience
+- Galaxy: Co-Founder & CRO (May 2025 - Sep 2025)
+- Unify: Growth & Bizops - 9th Employee (Apr 2024 - Jun 2025)
+- TZP Group: Growth Equity Associate (Aug 2022 - Mar 2024)
+- Morgan Stanley: Investment Banking Analyst - Global Technology Group (Jul 2020 - Jul 2022)
+- Duke University: Computer Science (2016 - 2020)
+
+# Skills
+GTM Tooling (Clay, n8n, Cursor, RB2B), SQL, Data Analysis, Python, Java, 35mm Film Photography
+
+# Interests
+Cooking, Tech Substack, NYC Restaurants, Movies, Traveling, Tennis, Soccer
+
+# Location
+New York, NY
+
