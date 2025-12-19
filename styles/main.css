@@ -420,6 +420,14 @@ body::before {
     margin: 0;
 }
 
+.tagline-separator {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
+    margin: 0.5rem 0;
+    align-self: stretch;
+}
+
 .hero-cta {
     display: inline-flex;
     align-items: center;
@@ -1369,6 +1377,102 @@ body::before {
     gap: 1rem;
 }
 
+/* Film Photography Section */
+.film-photography-section {
+    padding: 3rem 0;
+    background: rgba(17, 17, 17, 0.4);
+}
+
+.film-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.film-photo-item {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.film-photo-item::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle 100px at center, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease, width 0.3s ease, height 0.3s ease;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    transform: translate(-50%, -50%);
+}
+
+.film-photo-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.film-photo-item:hover {
+    transform: translateY(-6px) scale(1.02) translateZ(10px);
+    border-color: var(--color-purple-primary);
+    box-shadow: 0 16px 32px rgba(99, 102, 241, 0.4);
+}
+
+.film-photo-item:hover::before {
+    opacity: 0.3;
+    width: 300px;
+    height: 300px;
+}
+
+.film-photo-item:hover::after {
+    opacity: 1;
+}
+
+.film-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 0;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+    opacity: 1;
+    display: block;
+    filter: grayscale(0.2) brightness(0.9);
+}
+
+.film-photo-item:hover img {
+    transform: scale(1.1) rotate(1deg);
+    filter: grayscale(0) brightness(1.1);
+}
+
+.film-photography-footer {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
 .film-link {
     display: inline-flex;
     align-items: center;
@@ -1600,6 +1704,11 @@ body::before {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 0.75rem;
     }
+    
+    .film-photos-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+    }
 
     .bottom-toolbar {
         padding: 0.875rem 1.25rem;
@@ -1625,6 +1734,11 @@ body::before {
 
     .gallery-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .film-photos-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
     }
 }
 

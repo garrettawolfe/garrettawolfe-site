@@ -445,28 +445,28 @@ function loadHeroCollage() {
     const collage = document.getElementById('heroCollage');
     if (!collage) return;
     
-    // All photos except "Garrett Hoi An Vietnam.JPG" for hero collage
+    // All photos except "Garrett Hoi An Vietnam-min.JPG" for hero collage
     const photos = [
-        'Ajax.jpeg',
-        'Ediths Garrett.JPG',
-        'Fam in Hamptons.jpeg',
-        'Garrett Aix en Provence.JPG',
-        'Garrett and Brendan Lobster Pasta.JPG',
-        'Garrett and Devon Skiing.jpg',
-        'Garrett and Tri in Copenhagen.JPG',
-        'Garrett at Guerite.JPG',
-        // 'Garrett Hoi An Vietnam.JPG', // Excluded from hero collage
-        'Garrett Ibiza.jpeg',
-        'Garrett in Cope.JPG',
-        'Garrett in Marseille.JPG',
-        'Garrett in Tokyo.JPG',
-        'Garrett Marathon 2022.JPG',
-        'Guerite Lunch.JPG',
-        'Lads at Liam VDHs Wedding.JPG',
-        'Shortys.JPG',
-        'Squad at Guerite.JPG',
-        'Squad Cloud9.jpeg',
-        'Takalads.jpeg'
+        'Ajax-min.jpeg',
+        'Ediths Garrett-min.JPG',
+        'Fam in Hamptons-min.jpeg',
+        'Garrett Aix en Provence-min.JPG',
+        'Garrett and Brendan Lobster Pasta-min.JPG',
+        'Garrett and Devon Skiing-min.jpg',
+        'Garrett and Tri in Copenhagen-min.JPG',
+        'Garrett at Guerite-min.JPG',
+        // 'Garrett Hoi An Vietnam-min.JPG', // Excluded from hero collage
+        'Garrett Ibiza-min.jpeg',
+        'Garrett in Cope-min.JPG',
+        'Garrett in Marseille-min.JPG',
+        'Garrett in Tokyo-min.JPG',
+        'Garrett Marathon 2022-min.JPG',
+        'Guerite Lunch-min.JPG',
+        'Lads at Liam VDHs Wedding-min.JPG',
+        'Shortys-min.JPG',
+        'Squad at Guerite-min.JPG',
+        'Squad Cloud9-min.jpeg',
+        'Takalads-min.jpeg'
     ];
     
     // Shuffle and take 12 photos for the grid
@@ -544,7 +544,7 @@ function setupPhotoModal() {
 
 // Dynamic Hover Effects Based on Mouse Position
 function setupDynamicHover() {
-    const elements = document.querySelectorAll('.favorite-category, .toolbar-link, .playlist-item, .experience-card, .gallery-item, .network-link, .hero-cta');
+    const elements = document.querySelectorAll('.favorite-category, .toolbar-link, .playlist-item, .experience-card, .gallery-item, .network-link, .hero-cta, .film-photo-item');
     
     elements.forEach(element => {
         element.addEventListener('mousemove', function(e) {
@@ -696,26 +696,26 @@ function loadPhotoGallery() {
     if (!gallery) return;
 
     const photos = [
-        'Ajax.jpeg',
-        'Ediths Garrett.JPG',
-        'Fam in Hamptons.jpeg',
-        'Garrett Aix en Provence.JPG',
-        'Garrett and Brendan Lobster Pasta.JPG',
-        'Garrett and Devon Skiing.jpg',
-        'Garrett and Tri in Copenhagen.JPG',
-        'Garrett at Guerite.JPG',
-        'Garrett Hoi An Vietnam.JPG',
-        'Garrett Ibiza.jpeg',
-        'Garrett in Cope.JPG',
-        'Garrett in Marseille.JPG',
-        'Garrett in Tokyo.JPG',
-        'Garrett Marathon 2022.JPG',
-        'Guerite Lunch.JPG',
-        'Lads at Liam VDHs Wedding.JPG',
-        'Shortys.JPG',
-        'Squad at Guerite.JPG',
-        'Squad Cloud9.jpeg',
-        'Takalads.jpeg'
+        'Ajax-min.jpeg',
+        'Ediths Garrett-min.JPG',
+        'Fam in Hamptons-min.jpeg',
+        'Garrett Aix en Provence-min.JPG',
+        'Garrett and Brendan Lobster Pasta-min.JPG',
+        'Garrett and Devon Skiing-min.jpg',
+        'Garrett and Tri in Copenhagen-min.JPG',
+        'Garrett at Guerite-min.JPG',
+        'Garrett Hoi An Vietnam-min.JPG',
+        'Garrett Ibiza-min.jpeg',
+        'Garrett in Cope-min.JPG',
+        'Garrett in Marseille-min.JPG',
+        'Garrett in Tokyo-min.JPG',
+        'Garrett Marathon 2022-min.JPG',
+        'Guerite Lunch-min.JPG',
+        'Lads at Liam VDHs Wedding-min.JPG',
+        'Shortys-min.JPG',
+        'Squad at Guerite-min.JPG',
+        'Squad Cloud9-min.jpeg',
+        'Takalads-min.jpeg'
     ];
 
     gallery.innerHTML = photos.map(photo => {
@@ -733,6 +733,86 @@ function loadPhotoGallery() {
     setTimeout(() => {
         setupPhotoModal();
     }, 100);
+}
+
+// Load Film Photography Grid
+function loadFilmPhotos() {
+    const filmGrid = document.getElementById('filmPhotosGrid');
+    if (!filmGrid) return;
+    
+    const filmPhotos = [
+        'Beach in Marseille-min.JPG',
+        'Deer Valley Tree-min.JPG',
+        'Guys skiing-min.jpg',
+        'Ibiza Boat-min.JPG',
+        'Koh Phangan drive-min.JPG',
+        'Koh Phangan-min.JPG',
+        'Lagos Portugal-min.JPG',
+        'Osaka-min.JPG',
+        'Paloma Beach-min.JPG',
+        'Santa Teresa sunset-min.JPG',
+        'Shibuya Crossing-min.JPG',
+        'Tokyo Garden-min.JPG',
+        'Unify dinner-min.jpg',
+        'Vietnam Buggy-min.JPG',
+        'Vietnam-min.JPG'
+    ];
+    
+    filmGrid.innerHTML = filmPhotos.map(photo => {
+        const photoName = photo.replace(/\.(jpg|jpeg|JPG|JPEG)$/i, '').replace(/\s+/g, ' ');
+        return `
+        <div class="film-photo-item">
+            <img src="assets/images/film photos/${photo}" alt="${photoName} - Film Photography by Garrett Wolfe" loading="lazy" onerror="console.error('Failed to load film photo:', 'assets/images/film photos/${photo}'); this.parentElement.style.display='none';">
+        </div>
+    `;
+    }).join('');
+    
+    console.log('Film photography grid loaded with', filmPhotos.length, 'photos');
+    
+    // Setup modal for film photos too
+    setTimeout(() => {
+        setupFilmPhotoModal();
+    }, 100);
+}
+
+// Setup modal for film photos
+function setupFilmPhotoModal() {
+    const filmPhotos = document.querySelectorAll('.film-photo-item img');
+    const modal = document.getElementById('photoModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.getElementById('modalClose');
+    
+    if (!modal || !modalImage || !modalClose) return;
+    
+    // Close modal function
+    const closeModal = function() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+    
+    filmPhotos.forEach(img => {
+        img.addEventListener('click', function() {
+            modalImage.src = this.src;
+            modalImage.alt = this.alt;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+    // Close modal when clicking outside or on close button
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
 }
 
 // Murmuration Background Effect
@@ -830,6 +910,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         loadHeroCollage();
         loadPhotoGallery();
+        loadFilmPhotos();
     }, 100);
     
     loadSubstackPosts();
