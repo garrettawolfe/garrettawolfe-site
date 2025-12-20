@@ -1198,6 +1198,39 @@ body::before {
     line-height: 1.5;
 }
 
+.onegtm-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.onegtm-cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.onegtm-cta-button i {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+}
+
+.onegtm-cta-button:hover i {
+    transform: translateX(4px);
+}
+
 .cofounder-details {
     margin-top: 1.25rem;
 }
@@ -1920,9 +1953,6 @@ body::before {
     border-radius: 50%;
     color: var(--color-purple-light);
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     z-index: 1001;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
@@ -1941,6 +1971,7 @@ body::before {
     position: absolute;
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
 }
