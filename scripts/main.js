@@ -490,14 +490,29 @@ function loadHeroCollage() {
     
     console.log('Hero collage loaded with', shuffled.length, 'photos');
     
-    // Add flip on hover (immediate, no delay)
+    // Add flip on hover with rate limiting (max 1 flip per 500ms)
     setTimeout(() => {
         collage.querySelectorAll('.hero-photo-card').forEach(card => {
+            let lastFlipTime = 0;
+            const flipCooldown = 500; // milliseconds between flips
+            let isFlipped = false;
+            
             card.addEventListener('mouseenter', function() {
-                this.classList.add('flipped');
+                const now = Date.now();
+                if (!isFlipped && (now - lastFlipTime) >= flipCooldown) {
+                    this.classList.add('flipped');
+                    isFlipped = true;
+                    lastFlipTime = now;
+                }
             });
+            
             card.addEventListener('mouseleave', function() {
-                this.classList.remove('flipped');
+                const now = Date.now();
+                if (isFlipped && (now - lastFlipTime) >= flipCooldown) {
+                    this.classList.remove('flipped');
+                    isFlipped = false;
+                    lastFlipTime = now;
+                }
             });
         });
     }, 100);
@@ -1393,6 +1408,15 @@ const travelLocations = [
     { name: 'Istanbul, Turkey', lat: 41.0082, lng: 28.9784, type: 'visited', description: 'Where Europe meets Asia' },
     { name: 'Bodrum, Turkey', lat: 37.0344, lng: 27.4305, type: 'visited', description: 'Turkish Riviera' },
     { name: 'Iceland', lat: 64.9631, lng: -19.0208, type: 'visited', description: 'Land of fire and ice' },
+    { name: 'Prague, Czech Republic', lat: 50.0755, lng: 14.4378, type: 'visited', description: 'Historic capital' },
+    { name: 'Hungary', lat: 47.1625, lng: 19.5033, type: 'visited', description: 'Central European gem' },
+    { name: 'Luxembourg', lat: 49.6116, lng: 6.1319, type: 'visited', description: 'Small but mighty' },
+    { name: 'Mykonos, Greece', lat: 37.4467, lng: 25.3289, type: 'visited', description: 'Greek island paradise' },
+    { name: 'Santorini, Greece', lat: 36.3932, lng: 25.4615, type: 'visited', description: 'Stunning sunsets' },
+    { name: 'Segovia, Spain', lat: 40.9429, lng: -4.1088, type: 'visited', description: 'Historic Spanish town' },
+    { name: 'Morocco', lat: 31.7917, lng: -7.0926, type: 'visited', description: 'North African adventure' },
+    { name: 'Tenerife, Spain', lat: 28.4636, lng: -16.2518, type: 'visited', description: 'Canary Islands' },
+    { name: 'St. Barths', lat: 17.9000, lng: -62.8333, type: 'visited', description: 'Caribbean luxury' },
     
     // Asia
     { name: 'Koh Phangan, Thailand', lat: 9.7216, lng: 100.0188, type: 'favorite', description: 'Island vibes' },

@@ -28,7 +28,7 @@
         
         .container {
             text-align: center;
-            z-index: 1;
+            z-index: 10;
             position: relative;
             max-width: 600px;
             padding: 2rem;
@@ -63,12 +63,13 @@
         h1 {
             font-size: 2rem;
             margin-bottom: 1rem;
-            color: #d1d5db;
+            color: #ffffff;
+            font-weight: 600;
         }
         
         p {
             font-size: 1.125rem;
-            color: #9ca3af;
+            color: #d1d5db;
             margin-bottom: 2rem;
             max-width: 500px;
             margin-left: auto;
@@ -182,14 +183,15 @@
     <div class="container">
         <img src="assets/images/404/running.jpeg" alt="Garrett running NYC Marathon 2022" class="error-image">
         <div class="error-code">404</div>
-        <h1>Page Not Found</h1>
-        <p>I think youre in the wrong place lol</p>
+        <h1>Oops, this page doesn't exist</h1>
+        <p>I think you're in the wrong place lol</p>
+        <p style="font-size: 1rem; margin-top: 1rem; margin-bottom: 2rem;">The page you're looking for might have been moved, deleted, or never existed. But don't worry - you can always head back to the homepage to explore!</p>
         <a href="/" class="home-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
-            <span>Back to Home</span>
+            <span>Return to Homepage</span>
         </a>
     </div>
 </body>
